@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/MarceloALMoreira/alura-node/issues"
   },
-  "homepage": "https://github.com/MarceloALMoreira/alura-node#readme"
+  "homepage": "https://github.com/MarceloALMoreira/alura-node#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
 }
