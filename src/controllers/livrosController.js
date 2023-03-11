@@ -3,7 +3,7 @@ import livros from '../models/Livro.js'
 class LivroController {
     static getLivrosId = (req, res) => {
         const id = req.params.id
-        livros.findById(id, (err, livros) => {
+        livros.findById(id).populate('autor', 'nome').exec((err, livros) => {
             if (err) {
                 res.status(400).send({ message: `${err.message} - Id do Livro não encontrado` })
             } else {
@@ -12,7 +12,7 @@ class LivroController {
         })
     }
     static getLivros = (req, res) => {
-        livros.find((err, livros) => {
+        livros.find().populate('autor').exec((err, livros) => {
             res.status(200).json(livros)
         })
     }
