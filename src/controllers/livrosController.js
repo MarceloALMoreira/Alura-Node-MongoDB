@@ -1,3 +1,4 @@
+import { query } from 'express'
 import livros from '../models/Livro.js'
 
 class LivroController {
@@ -44,6 +45,12 @@ class LivroController {
             } else {
                 res.status(500).send({ message: err.message })
             }
+        })
+    }
+    static getLivroEditora = (req, res) => {
+        const editora = req.query.editora
+        livros.find({ 'editora': editora }, {}, (err, livros) => {
+            res.status(200).send(livros)
         })
     }
 }
