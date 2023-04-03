@@ -1,0 +1,8 @@
+# projeto com mongoDB
+
+deixando a conexao mais segura: 
+
+mongoose.connect(process.env.STRING_CONEXAO_DB)
+
+# Comando para concertar erro do eslint
+npx eslint ./src --fix

@@ -20,10 +20,12 @@
   },
   "homepage": "https://github.com/MarceloALMoreira/alura-node#readme",
   "devDependencies": {
+    "eslint": "^8.37.0",
     "nodemon": "^2.0.15"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
+    "dotenv": "^16.0.3",
     "express": "^4.17.3",
     "mongoose": "^6.2.6"
   }
