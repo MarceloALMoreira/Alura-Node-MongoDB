@@ -1,57 +1,64 @@
-import { query } from 'express';
 import livros from '../models/Livro.js';
 
 class LivroController {
-  static getLivrosId = (req, res) => {
-    const id = req.params.id;
-    livros.findById(id).populate('autor', 'nome').exec((err, livros) => {
-      if (err) {
-        res.status(400).send({ message: `${err.message} - Id do Livro não encontrado` });
-      } else {
-        res.status(200).send(livros);
-      }
-    });
+
+  static getLivros = async (req, res, next) => {
+    try {
+      const livrosResultado = await livros.find().populate('autor').exec();
+      return res.status(200).json(livrosResultado);
+    } catch (error) {
+      next(error);
+    }
   };
-  static getLivros = (req, res) => {
-    livros.find().populate('autor').exec((err, livros) => {
-      res.status(200).json(livros);
-    });
+
+  static getLivrosId = async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const livrosResultado = await livros.findById(id).populate('autor', 'nome').exec();
+      return res.status(200).json(livrosResultado);
+    } catch (error) {
+      next(error);
+    }
   };
-  static createLivros = (req, res) => {
-    const livro = new livros(req.body);
-    livro.save((err) => {
-      if (err) {
-        res.status(500).send({ message: `${err.message} - Falha ao cadastrar o Livro` });
-      } else {
-        res.status(201).send(livro.toJSON());
-      }
-    });
+
+  static createLivros = async (req, res, next) => {
+    try {
+      let livro = new livros(req.body);
+      const livrosResultado = await livro.save();
+      return res.status(201).send(livrosResultado.toJSON);
+    } catch (error) {
+      next(error);
+    }
   };
-  static updateLivros = (req, res) => {
-    const id = req.params.id;
-    livros.findByIdAndUpdate(id, { $set: req.body }, (err) => {
-      if (!err) {
-        res.status(200).send({ message: `o Livro ${id} Foi cadastro com Sucesso!` });
-      } else {
-        res.status(500).send({ message: err.message });
-      }
-    });
+
+  static updateLivros = async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      await livros.findByIdAndUpdate(id, { $set: req.body });
+      res.status(200).send({ message: 'Livro Atualizado com Sucesso!' });
+    } catch (error) {
+      next(error);
+    }
   };
-  static deleteLivros = (req, res) => {
-    const id = req.params.id;
-    livros.findByIdAndDelete(id, (err) => {
-      if (!err) {
-        res.status(200).send({ message: 'Livro removido com Sucesso' });
-      } else {
-        res.status(500).send({ message: err.message });
-      }
-    });
+
+  static deleteLivros = async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      await livros.findByIdAndDelete(id);
+      return res.status(200).send({ message: 'Livro removido com Sucesso!' });
+    } catch (error) {
+      next(error);
+    }
   };
-  static getLivroEditora = (req, res) => {
-    const editora = req.query.editora;
-    livros.find({ 'editora': editora }, {}, (err, livros) => {
-      res.status(200).send(livros);
-    });
+
+  static getLivroEditora = async (req, res, next) => {
+    try {
+      const editora = req.query.editora;
+      const livroResultadoEditora = await livros.find({ 'editora ': editora });
+      return res.status(200).json(livroResultadoEditora);
+    } catch (error) {
+      next(error);
+    }
   };
 }
 export default LivroController;
