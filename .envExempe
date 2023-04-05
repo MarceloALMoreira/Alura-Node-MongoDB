@@ -1,1 +1,1 @@
-STRING_CONEXAO_DB
+STRING_CONEXAO_DB = "mongodb+srv://almeida:1245441134@cluster0.ijmwhet.mongodb.net/gateste-node"
