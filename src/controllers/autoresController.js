@@ -43,9 +43,13 @@ class AutorController {
   static updateAutores = async (req, res, next) => {
     try {
       const id = req.params.id;
-      await autores.findByIdAndUpdate(id, { $set: req.body });
+      const autorResultado = await autores.findByIdAndUpdate(id, { $set: req.body });
 
-      return res.status(200).json({ message: 'Autor atualizado com sucesso' });
+      if (autorResultado !== null) {
+        res.status(200).json({ message: 'Autor atualizado com sucesso' });
+      } else {
+        next(new NaoEncontrado('Id do Autor não Encontrado'));
+      }
     } catch (error) {
       next(error);
     }
@@ -55,7 +59,11 @@ class AutorController {
     try {
       const id = req.params.id;
       await autores.findByIdAndDelete(id);
-      return res.status(200).send({ message: 'Autor Removido com sucesso!' });
+      if (autores !== null) {
+        res.status(200).send({ message: 'Autor Removido com sucesso!' });
+      } else {
+        next(new NaoEncontrado('Id do Autor não Encontrado'));
+      }
     } catch (error) {
       next(error);
     }
