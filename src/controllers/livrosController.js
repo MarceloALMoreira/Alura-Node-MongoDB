@@ -66,17 +66,10 @@ class LivroController {
     }
   };
 
-
   // Buscando por titulo do livro e por editora
   static getLivroFiltro = async (req, res, next) => {
     try {
-      const { editora, titulo } = req.query;
-
-      const busca = {};
-
-      if (editora) busca.editora = editora;
-
-      if (titulo) busca.titulo = titulo;
+      const busca = processaBusca(req.query);
 
       const livroResultadoEditora = await livros.find(busca);
 
@@ -86,4 +79,34 @@ class LivroController {
     }
   };
 }
+
+// criando uma função que nos devolvedo livros por filtros
+function processaBusca(parametros) {
+
+  const { editora, titulo, minPages, maxPages } = parametros;
+
+
+  const busca = {};
+
+  if (editora) busca.editora = editora;
+
+  // Aplicando uma regex para buscar o lirvo apenas com as primeiras letras do livro, ou que contêm palavras que o livro de ter
+
+  // { $regex: titulo, $options: 'i' } operadores de busca do mongoDB
+
+  //livros/busca?editora=Alura&titulo=alguma coisa
+  if (titulo) busca.titulo = { $regex: titulo, $options: 'i' };
+
+
+  if (minPages || maxPages) busca.pagina = {};
+
+  //gte = Greater than or Equal = Maior ou igual que
+  if (minPages) busca.pagina.$gte = minPages;
+
+  //lte = less than or Equal = Menor ou igual que
+  if (maxPages) busca.pagina.$lte = maxPages;
+
+  return busca;
+}
+
 export default LivroController;
