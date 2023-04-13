@@ -6,3 +6,27 @@ mongoose.connect(process.env.STRING_CONEXAO_DB)
 
 # Comando para concertar erro do eslint
 npx eslint ./src --fix
+
+
+
+
+
+
+## aula 4
+--Buscar pelos títulos dos livros de forma dinâmica:
+busca?editora=Alura
+busca?titulo=Mongo
+
+--Filtrar os livros por número de páginas:
+busca?maxPages=50
+busca?minPages=30
+
+--Buscar livros pelo nome do autor:
+busca?nomeAutor=Marcelo Almeida
+busca?nomeAtor=Marcelo Almeida&ordenacao=titulo:1
+busca?nomeAtor=Marcelo Almeida&ordenacao=titulo:1&pagina=2
+
+## aula 5
+
+
+campoOrdenacao=titulo&ordem=1

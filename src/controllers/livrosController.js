@@ -1,12 +1,16 @@
 import NaoEncontrado from '../erros/NaoEncontrado.js';
-import { livros } from '../models/index.js';
+import { autores, livros } from '../models/index.js';
 
 class LivroController {
 
   static getLivros = async (req, res, next) => {
     try {
-      const livrosResultado = await livros.find().populate('autor').exec();
-      return res.status(200).json(livrosResultado);
+
+      const buscaLivros = livros.find();
+
+      req.resultado = buscaLivros;
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -69,24 +73,33 @@ class LivroController {
   // Buscando por titulo do livro e por editora
   static getLivroFiltro = async (req, res, next) => {
     try {
-      const busca = processaBusca(req.query);
+      const busca = await processaBusca(req.query);
 
-      const livroResultadoEditora = await livros.find(busca);
+      if (busca !== null) {
 
-      return res.status(200).json(livroResultadoEditora);
+        const livroResultadoEditora = livros.find(busca).populate('autor'); //aplicando o metedo populate para que o mongose se encarregue de popular minha tabela na hoda da busca.
+
+        req.resultado = livroResultadoEditora;
+
+        next();
+
+      } else {
+        res.status(200).send([]);
+        // { message: 'O autor que voce Passou não Existe' }
+      }
     } catch (error) {
       next(error);
     }
   };
 }
 
-// criando uma função que nos devolvedo livros por filtros
-function processaBusca(parametros) {
+// criando uma função que nos devolvedo livros por filtros -- Buscando de forma dinâmica
+async function processaBusca(parametros) {
 
-  const { editora, titulo, minPages, maxPages } = parametros;
+  const { editora, titulo, minPages, maxPages, nomeAutor } = parametros;
 
 
-  const busca = {};
+  let busca = {};
 
   if (editora) busca.editora = editora;
 
@@ -106,7 +119,20 @@ function processaBusca(parametros) {
   //lte = less than or Equal = Menor ou igual que
   if (maxPages) busca.pagina.$lte = maxPages;
 
+  if (nomeAutor) {
+    const autor = await autores.findOne({ nome: nomeAutor });
+
+
+    if (autor !== null) {
+      busca.autor = autor._id;
+    } else {
+      busca = null;
+    }
+
+  }
+
   return busca;
 }
 
 export default LivroController;
+
