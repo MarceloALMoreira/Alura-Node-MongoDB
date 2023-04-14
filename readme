@@ -25,8 +25,14 @@ busca?minPages=30
 busca?nomeAutor=Marcelo Almeida
 busca?nomeAtor=Marcelo Almeida&ordenacao=titulo:1
 busca?nomeAtor=Marcelo Almeida&ordenacao=titulo:1&pagina=2
+livros/busca?editora&pagina=2
+livros/busca?nomeAutor=Marcelo Almeida&pagina=2
 
 ## aula 5
 
 
 campoOrdenacao=titulo&ordem=1
+autores?limite=2
+
+
+//  "eslint": "^8.37.0",

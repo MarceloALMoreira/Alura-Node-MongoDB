@@ -7,7 +7,12 @@ const livroSchema = new mongoose.Schema(
   {
     id: { type: String },
     titulo: { type: String, required: [true, 'O titulo do Livro é obrigatório'] },
-    autor: { type: mongoose.Schema.Types.ObjectId, ref: 'autores', required: [true, 'O(a) Autor(a) é obrigatório'] },
+    autor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'autores',
+      required: [true, 'O(a) Autor(a) é obrigatório'],
+      autopopulate: { select: 'nome' }
+    },
     editora: {
       type: String, required: [true, 'A editora é obrigatória'],
       enum: {

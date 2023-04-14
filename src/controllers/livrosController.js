@@ -19,7 +19,7 @@ class LivroController {
   static getLivrosId = async (req, res, next) => {
     try {
       const id = req.params.id;
-      const livrosResultado = await livros.findById(id).populate('autor', 'nome').exec();
+      const livrosResultado = await livros.findById(id, {}, { autopopulate: false }).populate('autor');
       if (livrosResultado !== null) {
         return res.status(200).json(livrosResultado);
       } else {
@@ -77,7 +77,7 @@ class LivroController {
 
       if (busca !== null) {
 
-        const livroResultadoEditora = livros.find(busca).populate('autor'); //aplicando o metedo populate para que o mongose se encarregue de popular minha tabela na hoda da busca.
+        const livroResultadoEditora = livros.find(busca).populate('autor', 'nome'); //aplicando o metedo populate para que o mongose se encarregue de popular minha tabela na hoda da busca.
 
         req.resultado = livroResultadoEditora;
 
